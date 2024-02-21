@@ -7,6 +7,19 @@
     <title>Citation</title>
 </head>
 <body>
-
+    <h1>Citation</h1>
+    <script>
+        fetch('/citations.json')
+          .then(response => response.json())
+          .then(data => {
+            const citationContainer = document.getElementById('citation-container');
+            const randomIndex = Math.floor(Math.random() * data.length);
+            const randomCitation = data[randomIndex];
+            citationContainer.innerHTML = `<p>"${randomCitation.citation}" - ${randomCitation.auteur}</p>`;
+          })
+          .catch(error => console.error('Erreur lors de la récupération des citations :', error));
+      </script>
+      
+      <div id="citation-container"></div>
 </body>
 </html>
