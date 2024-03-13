@@ -4,22 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Citation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Dancing+Script:wght@400..700&family=Paytone+One&family=Rubik+Glitch+Pop&family=Sixtyfour&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Dancing+Script:wght@400..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Paytone+One&family=Rubik+Glitch+Pop&family=Sixtyfour&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Dancing+Script:wght@400..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Ojuju:wght@200..800&family=Paytone+One&family=Rubik+Glitch+Pop&family=Sixtyfour&display=swap" rel="stylesheet">
+    <title>Génerateur de Citation</title>
 </head>
 <body>
-    <h1>Citation</h1>
-    <script>
+    <h1>Voici la citation :</h1>
+    <div id="citation-container"></div>
+    <button id="refresh-button" class="button" data-text="Awesome">
+      <span class="actual-text">&nbsp;Générer&nbsp;</span>
+      <span aria-hidden="true" class="hover-text">&nbsp;Générer&nbsp;</span>
+    </button>
+    <script src="script.js"></script>
+    <script class="citation-style">
         fetch('/citations.json')
           .then(response => response.json())
           .then(data => {
             const citationContainer = document.getElementById('citation-container');
             const randomIndex = Math.floor(Math.random() * data.length);
             const randomCitation = data[randomIndex];
-            citationContainer.innerHTML = `<p>"${randomCitation.citation}" - ${randomCitation.auteur}</p>`;
+            citationContainer.innerHTML = `<p class="citation-text">${randomCitation.citation} - ${randomCitation.auteur}</p>`;
           })
           .catch(error => console.error('Erreur lors de la récupération des citations :', error));
-      </script>
-      
-      <div id="citation-container"></div>
+    </script>
 </body>
 </html>
+

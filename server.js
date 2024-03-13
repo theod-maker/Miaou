@@ -3,49 +3,41 @@ const fs = require('fs');
 const path = require('path');
 
 const requestHandler = (request, response) => {
-  console.log('Requête reçue.');
+    console.log('Requête reçue.');
 
-  const url = request.url;
-  const filePath = url === '/' ? 'index.html' : url; // Chemin local pour les fichiers du projet
+    const url = request.url;
+    let filePath = '.' + url;
+    if (filePath === './') {
+        filePath = './citation.html';
+    }
 
-  if (filePath.endsWith('.html') || filePath.endsWith('.css') || filePath.endsWith('.js')) {
+    const extname = String(path.extname(filePath)).toLowerCase();
+    const contentType = {
+        '.html': 'text/html',
+        '.css': 'text/css',
+        '.js': 'text/javascript',
+        '.json': 'application/json'
+    }[extname] || 'application/octet-stream';
+
     fs.readFile(filePath, (err, data) => {
-      if (err) {
-        response.writeHead(404);
-        response.end('404 Not Found');
-      } else {
-        let contentType = 'text/html';
-        if (filePath.endsWith('.css')) {
-          contentType = 'text/css';
-        } else if (filePath.endsWith('.js')) {
-          contentType = 'text/javascript';
+        if (err) {
+            response.writeHead(404);
+            response.end('404 Not Found');
+        } else {
+            response.writeHead(200, { 'Content-Type': contentType });
+            response.end(data, 'utf-8');
         }
-        response.writeHead(200, { 'Content-Type': contentType });
-        response.end(data);
-      }
     });
-  } else if (filePath === '/citations.json') {
-    const jsonPath = path.join(__dirname, 'citations.json');
-    fs.readFile(jsonPath, (err, data) => {
-      if (err) {
-        response.writeHead(404);
-        response.end('404 Not Found');
-      } else {
-        response.writeHead(200, { 'Content-Type': 'application/json' });
-        response.end(data);
-      }
-    });
-  } else {
-    response.writeHead(404);
-    response.end('404 Not Found');
-  }
 };
 
 const server = http.createServer(requestHandler);
 
 server.listen(3000, (err) => {
-  if (err) {
-    return console.error('Impossible de démarrer le serveur :', err);
-  }
-  console.log('Serveur démarré sur le port 3000');
+    if (err) {
+        return console.error('Impossible de démarrer le serveur :', err);
+    }
+    console.log('Serveur démarré sur le port 3000');
 });
+
+
+
